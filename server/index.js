@@ -184,6 +184,28 @@ app.post("/api/login", async (req, res) => {
 });
 
 
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// API Routes go here... (This is where the existing API routes are)
+
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res, next) => {
+    // Skip API routes so they 404 correctly if not found
+    if (req.url.startsWith('/api')) {
+        return next();
+    }
+
+    // Serve admin.html if the path starts with /admin
+    if (req.url.startsWith('/admin') || req.url.includes('admin.html')) {
+        res.sendFile(path.join(__dirname, '../dist/admin.html'));
+        return;
+    }
+
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
