@@ -191,7 +191,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // API Routes go here... (This is where the existing API routes are)
 
 // Anything that doesn't match the above, send back index.html
-app.get('*', (req, res, next) => {
+app.get(/^(?!\/api).+/, (req, res, next) => {
     // Skip API routes so they 404 correctly if not found
     if (req.url.startsWith('/api')) {
         return next();
